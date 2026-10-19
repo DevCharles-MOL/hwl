@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Health Digital Walet</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" th:href="@{/}"><span class="brand-mark">HDW</span> Health Digital Walet</a>
+    <nav aria-label="Navegación principal">
+        <a class="nav-link" th:href="@{/login}">Iniciar sesión</a>
+        <a class="button button-small" th:href="@{/registro}">Crear cuenta</a>
+    </nav>
+</header>
+<main class="welcome">
+    <section class="welcome-copy">
+        <p class="eyebrow">Portal de atención</p>
+        <h1>Historias clínicas, en un solo lugar.</h1>
+        <p class="lead">Explora el portal o crea una cuenta para comenzar.</p>
+        <div class="actions">
+            <a class="button" th:href="@{/login}">Ingresar</a>
+            <a class="button button-outline" th:href="@{/registro}">Registrarme</a>
+        </div>
+    </section>
+    <aside class="welcome-aside" aria-label="Acceso al portal">
+        <span class="aside-kicker">Portal en desarrollo</span>
+        <div class="pulse-mark">+</div>
+        <p>Los espacios de usuario y administración se habilitarán más adelante.</p>
+    </aside>
+</main>
+<footer class="site-footer">Historias Clínicas <span>·</span> Portal de acceso</footer>
+</body>
+</html>
