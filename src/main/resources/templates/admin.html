@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Administración | Historias Clínicas</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" th:href="@{/}"><span class="brand-mark">HC</span> Historias Clínicas</a>
+    <form th:action="@{/logout}" method="post">
+        <button class="button-link nav-link" type="submit">Cerrar sesión</button>
+    </form>
+</header>
+<main class="dashboard">
+    <p class="eyebrow">Panel de administración</p>
+    <h1>Administración</h1>
+    <p class="lead">Vista de administrador de muestra.</p>
+    <section class="dashboard-section">
+        <h2>Panel inicial</h2>
+        <p>Desde aquí se podrán incorporar las herramientas de gestión de usuarios y del sistema.</p>
+    </section>
+</main>
+</body>
+</html>

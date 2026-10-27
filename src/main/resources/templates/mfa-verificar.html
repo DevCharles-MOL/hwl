@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Verificación en dos pasos | Historias Clínicas</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="form-page">
+<header class="topbar">
+    <a class="brand" th:href="@{/}"><span class="brand-mark">HC</span> Historias Clínicas</a>
+    <form th:action="@{/logout}" method="post">
+        <button class="button-link nav-link" type="submit">Cerrar sesión</button>
+    </form>
+</header>
+<main class="form-shell">
+    <section class="form-intro">
+        <p class="eyebrow">Un paso más</p>
+        <h1>Verificación en dos pasos</h1>
+        <p>Abre Microsoft Authenticator y escribe el código de 6 dígitos de tu cuenta.</p>
+    </section>
+    <form class="form-panel" th:action="@{/mfa/verificar}" method="post">
+        <p class="notice notice-error" th:if="${error}" th:text="${error}"></p>
+        <label for="codigo">Código de 6 dígitos</label>
+        <input id="codigo" name="codigo" type="text" inputmode="numeric" pattern="[0-9 ]{6,7}" maxlength="7" autocomplete="one-time-code" required autofocus>
+        <button class="button button-full" type="submit">Verificar</button>
+    </form>
+</main>
+</body>
+</html>

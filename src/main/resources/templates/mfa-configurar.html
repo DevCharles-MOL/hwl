@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Activar verificación en dos pasos | Historias Clínicas</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="form-page">
+<header class="topbar">
+    <a class="brand" th:href="@{/}"><span class="brand-mark">HC</span> Historias Clínicas</a>
+    <form th:action="@{/logout}" method="post">
+        <button class="button-link nav-link" type="submit">Cerrar sesión</button>
+    </form>
+</header>
+<main class="form-shell">
+    <section class="form-intro">
+        <p class="eyebrow">Seguridad de la cuenta</p>
+        <h1>Activa la verificación en dos pasos</h1>
+        <p>1. Abre Microsoft Authenticator y toca <strong>+</strong> → <strong>Otra cuenta (Google u otros)</strong>.<br>
+           2. Escanea este código QR.<br>
+           3. Escribe abajo el código de 6 dígitos que te muestre la app.</p>
+    </section>
+    <form class="form-panel" th:action="@{/mfa/configurar}" method="post">
+        <p class="notice notice-error" th:if="${error}" th:text="${error}"></p>
+        <img class="qr" th:src="${qr}" alt="Código QR para Microsoft Authenticator" width="220" height="220">
+        <p class="form-note">¿No puedes escanear? Ingresa esta clave manualmente:</p>
+        <p class="secret-code" th:text="${secreto}"></p>
+        <label for="codigo">Código de 6 dígitos</label>
+        <input id="codigo" name="codigo" type="text" inputmode="numeric" pattern="[0-9 ]{6,7}" maxlength="7" autocomplete="one-time-code" required autofocus>
+        <button class="button button-full" type="submit">Activar y continuar</button>
+    </form>
+</main>
+</body>
+</html>
