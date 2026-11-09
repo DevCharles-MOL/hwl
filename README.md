@@ -15,9 +15,8 @@ En Windows, desde la carpeta del proyecto:
 .\mvnw.cmd spring-boot:run
 ```
 
-La aplicación estará disponible en <http://localhost:8080>. De forma predeterminada usa una base de datos H2 en memoria, por lo que no requiere instalar PostgreSQL.
+La aplicación estará disponible en <http://localhost:8080>. Por defecto se conecta a PostgreSQL en `localhost:5432`, a la base `hwd`, con el usuario `postgres`. Configura `DB_PASSWORD` en el entorno antes de iniciar la aplicación. Puedes cambiar la URL, el usuario y el puerto mediante `DB_URL`, `DB_USERNAME` y `SERVER_PORT`, respectivamente.
 
-Para conectarla a PostgreSQL, configura `DB_URL`, `DB_USERNAME` y `DB_PASSWORD` en el entorno antes de iniciar la aplicación.
 
 ## Estado y uso
 
