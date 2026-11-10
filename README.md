@@ -15,12 +15,11 @@ En Windows, desde la carpeta del proyecto:
 .\mvnw.cmd spring-boot:run
 ```
 
-La aplicación estará disponible en <http://localhost:8080>. De forma predeterminada usa una base de datos H2 en memoria, por lo que no requiere instalar PostgreSQL.
+La aplicación estará disponible en <http://localhost:8080>. Por defecto se conecta a PostgreSQL en `localhost:5432`, a la base `hwd`, con el usuario `postgres`. Configura `DB_PASSWORD` en el entorno antes de iniciar la aplicación. Puedes cambiar la URL, el usuario y el puerto mediante `DB_URL`, `DB_USERNAME` y `SERVER_PORT`, respectivamente.
 
-Para conectarla a PostgreSQL, configura `DB_URL`, `DB_USERNAME` y `DB_PASSWORD` en el entorno antes de iniciar la aplicación.
 
 ## Estado y uso
 
-El registro crea usuarios con rol `USER`. El inicio de sesión y los paneles de usuario y administración son todavía demostrativos; las páginas no están protegidas por autenticación.
+El registro envía un código al correo y solo crea la cuenta `USER` después de verificarlo. Configura las variables SMTP descritas en `.env.example`. El inicio de sesión y los paneles son demostrativos; las rutas están protegidas por Spring Security.
 
 Este proyecto no debe utilizarse para almacenar información clínica real ni desplegarse como sistema de producción sin implementar y validar controles de seguridad y privacidad adecuados.

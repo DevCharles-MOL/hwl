@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Verificar correo | Historias Clínicas</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="form-page">
+<header class="topbar">
+    <a class="brand" th:href="@{/}"><span class="brand-mark">HC</span> Historias Clínicas</a>
+    <a class="nav-link" th:href="@{/registro}">Volver al registro</a>
+</header>
+<main class="form-shell">
+    <section class="form-intro">
+        <p class="eyebrow">Confirma tu correo</p>
+        <h1>Verifica tu cuenta</h1>
+        <p th:text="|Enviamos un código a ${emailEnmascarado}. Escríbelo para crear tu cuenta.|"></p>
+    </section>
+    <form class="form-panel" th:action="@{/registro/verificar}" method="post">
+        <p class="notice notice-success" th:if="${mensaje}" th:text="${mensaje}" role="status"></p>
+        <p class="notice notice-error" th:if="${error}" th:text="${error}" role="alert"></p>
+        <label for="codigo">Código de verificación</label>
+        <input id="codigo" name="codigo" type="text" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="one-time-code" required autofocus>
+        <p class="form-note">El código vence en 5 minutos y solo se puede usar una vez.</p>
+        <button class="button button-full" type="submit">Verificar correo</button>
+    </form>
+    <form class="form-panel" th:action="@{/registro/reenviar}" method="post" style="margin-top:12px;text-align:center">
+        <button class="button button-outline" id="reenviar" type="submit" disabled>Reenviar código</button>
+        <p class="form-note" id="contador" aria-live="polite">Puedes reenviar en 60 segundos.</p>
+    </form>
+</main>
+<script>
+(() => { const b=document.getElementById('reenviar'), t=document.getElementById('contador'); let s=60;
+  function tick(){ if(s<=0){b.disabled=false;t.textContent='Ya puedes solicitar otro código.';return;}
+    t.textContent=`Puedes reenviar en ${s} segundos.`;s--;window.setTimeout(tick,1000); }
+  tick();
+})();
+</script>
+</body>
+</html>
