@@ -56,7 +56,7 @@ jobs:
           echo "AWS role: $AWS_ROLE_TO_ASSUME"
           test "$issuer" = "https://token.actions.githubusercontent.com"
           test "$audience" = "sts.amazonaws.com"
-          test "$subject" = "repo:DevCharles-MOL/hwl:ref:refs/heads/main"
+          test "$subject" = "repo:DevCharles-MOL@343306284/hwl@1426204851:ref:refs/heads/main"
           test "$AWS_ROLE_TO_ASSUME" = "arn:aws:iam::188550350474:role/GitHubActionsDeployHdw"
 
       - name: Configure AWS credentials
