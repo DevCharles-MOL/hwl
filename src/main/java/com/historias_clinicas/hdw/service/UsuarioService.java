@@ -26,14 +26,27 @@ public class UsuarioService {
 		crear(nombre, email, password, Rol.USER);
 	}
 
+	@Transactional(readOnly = true)
+	public RegistroPreparado prepararRegistro(String nombre, String email, String password) {
+		validar(nombre, email, password);
+		String normalizado = email.trim().toLowerCase(Locale.ROOT);
+		if (usuarioRepository.existsByEmail(normalizado)) {
+			throw new IllegalArgumentException("Ya existe una cuenta con ese correo.");
+		}
+		return new RegistroPreparado(nombre.trim(), normalizado, passwordEncoder.encode(password));
+	}
+
+	@Transactional
+	public void crearVerificado(RegistroPreparado registro) {
+		if (usuarioRepository.existsByEmail(registro.email())) {
+			throw new IllegalArgumentException("Ya existe una cuenta con ese correo.");
+		}
+		usuarioRepository.save(new Usuario(registro.nombre(), registro.email(), registro.passwordHash(), Rol.USER));
+	}
+
 	@Transactional
 	public void crear(String nombre, String email, String password, Rol rol) {
-		if (nombre == null || nombre.isBlank()) {
-			throw new IllegalArgumentException("El nombre es obligatorio.");
-		}
-		if (password == null || password.length() < 8) {
-			throw new IllegalArgumentException("La contraseña debe tener al menos 8 caracteres.");
-		}
+		validar(nombre, email, password);
 		String emailNormalizado = email.trim().toLowerCase(Locale.ROOT);
 		if (usuarioRepository.existsByEmail(emailNormalizado)) {
 			throw new IllegalArgumentException("Ya existe una cuenta con ese correo.");
@@ -41,4 +54,12 @@ public class UsuarioService {
 		usuarioRepository.save(new Usuario(nombre.trim(), emailNormalizado,
 				passwordEncoder.encode(password), rol));
 	}
+
+	private void validar(String nombre, String email, String password) {
+		if (nombre == null || nombre.isBlank()) throw new IllegalArgumentException("El nombre es obligatorio.");
+		if (email == null || email.isBlank()) throw new IllegalArgumentException("El correo electrónico es obligatorio.");
+		if (password == null || password.length() < 8) throw new IllegalArgumentException("La contraseña debe tener al menos 8 caracteres.");
+	}
+
+	public record RegistroPreparado(String nombre, String email, String passwordHash) { }
 }
