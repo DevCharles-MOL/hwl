@@ -46,6 +46,7 @@ El rol de GitHub debe usar OpenID Connect (OIDC), limitado al repositorio y a la
 5. Inyecta `DB_PASSWORD` como secreto de AWS Secrets Manager en vez de texto plano. Da al rol de ejecución de tareas permiso para leer ese secreto (y la clave KMS si usas una clave propia).
 6. Define también `MFA_ENCRYPTION_PASSWORD` y `MFA_ENCRYPTION_SALT` como secretos/variables estables: usa una contraseña aleatoria fuerte y un salt hexadecimal aleatorio de 16 caracteres. **No los cambies después de guardar secretos MFA cifrados**, pues podrían quedar ilegibles.
 7. Si la aplicación debe crear un administrador inicial, configura `ADMIN_EMAIL` y `ADMIN_PASSWORD`; guarda la contraseña como secreto. Si no defines ambos, no se crea ese administrador.
+8. Para que funcione la confirmación de correo, configura en el servicio ECS `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_FROM`, `MAIL_SMTP_AUTH`, `MAIL_SMTP_STARTTLS` y `MAIL_MAX_RESENDS_PER_HOUR`. Inyecta `MAIL_PASSWORD` desde Secrets Manager; no guardes credenciales SMTP en GitHub ni en el código. Sin un SMTP válido, el servicio puede iniciar, pero no podrá enviar códigos de registro.
 
 Después de crear el servicio desde `latest`, añade las variables `ECS_CLUSTER` y `ECS_SERVICE` en GitHub. Las siguientes ejecuciones del flujo actualizarán la imagen.
 
