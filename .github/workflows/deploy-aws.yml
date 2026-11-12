@@ -32,6 +32,33 @@ jobs:
           chmod +x ./mvnw
           ./mvnw -B verify
 
+      - name: Validate GitHub OIDC claims
+        env:
+          AWS_ROLE_TO_ASSUME: ${{ vars.AWS_ROLE_TO_ASSUME }}
+        run: |
+          set -euo pipefail
+          response=$(curl --fail --silent --show-error \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=sts.amazonaws.com")
+          token=$(printf '%s' "$response" | jq -r '.value')
+          payload=$(printf '%s' "$token" | cut -d. -f2 | tr '_-' '/+')
+          case $((${#payload} % 4)) in
+            2) payload="${payload}==" ;;
+            3) payload="${payload}=" ;;
+          esac
+          claims=$(printf '%s' "$payload" | base64 -d)
+          issuer=$(printf '%s' "$claims" | jq -r '.iss')
+          audience=$(printf '%s' "$claims" | jq -r '.aud')
+          subject=$(printf '%s' "$claims" | jq -r '.sub')
+          echo "OIDC issuer: $issuer"
+          echo "OIDC audience: $audience"
+          echo "OIDC subject: $subject"
+          echo "AWS role: $AWS_ROLE_TO_ASSUME"
+          test "$issuer" = "https://token.actions.githubusercontent.com"
+          test "$audience" = "sts.amazonaws.com"
+          test "$subject" = "repo:DevCharles-MOL@343306284/hwl@1426204851:ref:refs/heads/main"
+          test "$AWS_ROLE_TO_ASSUME" = "arn:aws:iam::188550350474:role/GitHubActionsDeployHdw"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -52,8 +79,7 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
 
       - name: Deploy updated image
-        if: vars.ECS_CLUSTER != '' && vars.ECS_SERVICE != ''
         env:
-          ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
-          ECS_SERVICE: ${{ vars.ECS_SERVICE }}
+          ECS_CLUSTER: ${{ vars.ECS_CLUSTER || 'default' }}
+          ECS_SERVICE: ${{ vars.ECS_SERVICE || 'hdw' }}
         run: aws ecs update-service --cluster "$ECS_CLUSTER" --service "$ECS_SERVICE" --force-new-deployment
